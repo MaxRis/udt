@@ -115,6 +115,16 @@ public: // for CUDTUnited API
    int remove_usock(const int eid, const UDTSOCKET& u);
 
       // Functionality:
+      //    remove a UDT socket event from an EPoll; socket will be removed completely
+      // Parameters:
+      //    0) [in] eid: EPoll ID.
+      //    1) [in] u: UDT socket ID.
+      // Returned value:
+      //    0 if success, otherwise an error number.
+
+   int force_remove_usock(const int eid, const UDTSOCKET& u);
+
+      // Functionality:
       //    remove a system socket event from an EPoll; socket will be removed if no events to watch
       // Parameters:
       //    0) [in] eid: EPoll ID.

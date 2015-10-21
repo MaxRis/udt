@@ -957,7 +957,7 @@ void CUDT::close()
    try
    {
       for (set<int>::iterator i = m_sPollID.begin(); i != m_sPollID.end(); ++ i)
-         s_UDTUnited.m_EPoll.remove_usock(*i, m_SocketID);
+         s_UDTUnited.m_EPoll.force_remove_usock(*i, m_SocketID);
    }
    catch (...)
    {

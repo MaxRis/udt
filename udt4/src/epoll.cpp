@@ -157,6 +157,24 @@ int CEPoll::remove_usock(const int eid, const UDTSOCKET& u)
    return 0;
 }
 
+int CEPoll::force_remove_usock(const int eid, const UDTSOCKET& u)
+{
+   CGuard pg(m_EPollLock);
+
+   map<int, CEPollDesc>::iterator p = m_mPolls.find(eid);
+   if (p == m_mPolls.end())
+      throw CUDTException(5, 13);
+
+   p->second.m_sUDTSocksIn.erase(u);
+   p->second.m_sUDTSocksOut.erase(u);
+   p->second.m_sUDTSocksEx.erase(u);
+   p->second.m_sUDTReads.erase(u);
+   p->second.m_sUDTWrites.erase(u);
+   p->second.m_sUDTExcepts.erase(u);
+
+   return 0;
+}
+
 int CEPoll::remove_ssock(const int eid, const SYSSOCKET& s)
 {
    CGuard pg(m_EPollLock);
