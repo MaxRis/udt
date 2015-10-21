@@ -835,6 +835,7 @@ void CRendezvousQueue::updateConnStatus()
       return;
 
    CGuard vg(m_RIDVectorLock);
+   list<UDTSOCKET> needRemoved;
 
    for (list<CRL>::iterator i = m_lRendezvousID.begin(); i != m_lRendezvousID.end(); ++ i)
    {
@@ -846,6 +847,7 @@ void CRendezvousQueue::updateConnStatus()
             // connection timer expired, acknowledge app via epoll
             i->m_pUDT->m_bConnecting = false;
             CUDT::s_UDTUnited.m_EPoll.update_events(i->m_iID, i->m_pUDT->m_sPollID, UDT_EPOLL_ERR, true);
+            needRemoved.push_back(i->m_pUDT->m_SocketID);
             continue;
          }
 
@@ -862,6 +864,11 @@ void CRendezvousQueue::updateConnStatus()
          delete [] reqdata;
       }
    }
+   for (list<UDTSOCKET>::iterator i = needRemoved.begin(); i != needRemoved.end(); ++ i)
+   {
+       remove(*i);
+   }
+
 }
 
 //
