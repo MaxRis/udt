@@ -293,7 +293,7 @@ uint64_t CTimer::getTime()
       {
           LARGE_INTEGER cc = { 0 };
          try
-      {
+         {
              ret = QueryPerformanceCounter(&cc);
          }
          catch (...)
@@ -377,24 +377,6 @@ CGuard::~CGuard()
    #else
       if (WAIT_FAILED != m_iLocked)
          ReleaseMutex(m_Mutex);
-   #endif
-}
-
-void CGuard::enterCS(pthread_mutex_t& lock)
-{
-   #ifndef WIN32
-      pthread_mutex_lock(&lock);
-   #else
-      WaitForSingleObject(lock, INFINITE);
-   #endif
-}
-
-void CGuard::leaveCS(pthread_mutex_t& lock)
-{
-   #ifndef WIN32
-      pthread_mutex_unlock(&lock);
-   #else
-      ReleaseMutex(lock);
    #endif
 }
 

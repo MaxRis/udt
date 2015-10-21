@@ -191,9 +191,6 @@ public:
    ~CGuard();
 
 public:
-   static void enterCS(pthread_mutex_t& lock);
-   static void leaveCS(pthread_mutex_t& lock);
-
    static void createMutex(pthread_mutex_t& lock);
    static void releaseMutex(pthread_mutex_t& lock);
 
