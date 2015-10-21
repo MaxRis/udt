@@ -974,14 +974,18 @@ void CUDT::close()
    // Signal the sender and recver if they are waiting for data.
    releaseSynch();
 
-   if (m_bListening)
+   if (m_pRcvQueue != NULL)
    {
-      m_bListening = false;
-      m_pRcvQueue->removeListener(this);
-   }
-   else if (m_bConnecting)
-   {
-      m_pRcvQueue->removeConnector(m_SocketID);
+       if (m_bListening)
+       {
+           m_bListening = false;
+           m_pRcvQueue->removeListener(this);
+       }
+       else if (m_bConnecting)
+       {
+           m_bConnecting = false;
+           m_pRcvQueue->removeConnector(m_SocketID);
+       }
    }
 
    if (m_bConnected)
