@@ -15,11 +15,20 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-   if ((argc != 5) || (0 == atoi(argv[2])))
+   if ((argc != 9) || (0 == atoi(argv[2])))
    {
-      cout << "usage: recvfile server_ip server_port remote_filename local_filename" << endl;
+      cout << "usage: recvfile server_ip server_port remote_filename local_filename UDT_MSS UDT_SNDBUF UDT_RCVBUF UDT_MAXBW" << endl;
       return -1;
    }
+
+   const int UDT_MSS_PARAM = 5;
+   cout << "UDT_MSS = " << argv[UDT_MSS_PARAM] << endl;
+   const int UDT_SNDBUF_PARAM = 6;
+   cout << "UDT_SNDBUF = " << argv[UDT_SNDBUF_PARAM] << endl;
+   const int UDT_RCVBUF_PARAM = 7;
+   cout << "UDT_RCVBUF = " << argv[UDT_RCVBUF_PARAM] << endl;
+   const int UDT_MAXBW_PARAM = 8;
+   cout << "UDT_MAXBW = " << argv[UDT_MAXBW_PARAM] << endl;
 
    // use this function to initialize the UDT library
    UDT::startup();
@@ -32,6 +41,11 @@ int main(int argc, char* argv[])
    hints.ai_socktype = SOCK_STREAM;
 
    UDTSOCKET fhandle = UDT::socket(hints.ai_family, hints.ai_socktype, hints.ai_protocol);
+
+   UDT::setsockopt(fhandle, 0, UDT_MSS, new int(atoi(argv[UDT_MSS_PARAM])), sizeof(int));
+   UDT::setsockopt(fhandle, 0, UDT_SNDBUF, new int(atoi(argv[UDT_SNDBUF_PARAM])), sizeof(int));
+   UDT::setsockopt(fhandle, 0, UDT_RCVBUF, new int(atoi(argv[UDT_RCVBUF_PARAM])), sizeof(int));
+   UDT::setsockopt(fhandle, 0, UDT_MAXBW, new int(atoi(argv[UDT_MAXBW_PARAM])), sizeof(int));
 
    if (0 != getaddrinfo(argv[1], argv[2], &hints, &peer))
    {
