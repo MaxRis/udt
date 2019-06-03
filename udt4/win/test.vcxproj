@@ -152,7 +152,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>kernel32.lib;user32.lib;ws2_32.lib;udt.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;ws2_32.lib;$(SolutionDir)$(Platform)\$(Configuration)\udt.lib</AdditionalDependencies>
       <OutputFile>$(OutDir)test.exe</OutputFile>
       <AdditionalLibraryDirectories>../src;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>

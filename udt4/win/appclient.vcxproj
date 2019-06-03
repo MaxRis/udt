@@ -184,9 +184,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\app\appclient.cpp" />
+    <ClCompile Include="..\app\commonapp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\app\cc.h" />
+    <ClInclude Include="..\app\commonapp.h" />
     <ClInclude Include="..\src\udt.h" />
   </ItemGroup>
   <ItemGroup>
