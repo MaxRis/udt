@@ -177,9 +177,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\app\commonapp.cpp" />
     <ClCompile Include="..\app\sendfile.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\app\commonapp.h" />
     <ClInclude Include="..\src\udt.h" />
   </ItemGroup>
   <ItemGroup>
