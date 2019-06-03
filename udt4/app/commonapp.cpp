@@ -11,7 +11,7 @@ void printInputParams(int argc, char* argv[], int offset)
 	cout << "UDT_SNDBUF = " << argv[UDT_SNDBUF_PARAM + offset] << endl;
 	cout << "UDT_RCVBUF = " << argv[UDT_RCVBUF_PARAM + offset] << endl;
 	cout << "UDP_SNDBUF = " << argv[UDP_SNDBUF_PARAM + offset] << endl;
-	cout << "UDPT_RCVBUF = " << argv[UDP_RCVBUF_PARAM + offset] << endl;
+	cout << "UDP_RCVBUF = " << argv[UDP_RCVBUF_PARAM + offset] << endl;
 }
 
 void setInputParams(UDTSOCKET socket, int argc, char* argv[], int offset)
@@ -19,8 +19,8 @@ void setInputParams(UDTSOCKET socket, int argc, char* argv[], int offset)
    UDT::setsockopt(socket, 0, UDT_MSS, new int(atoi(argv[UDT_MSS_PARAM + offset])), sizeof(int));
    UDT::setsockopt(socket, 0, UDT_SNDBUF, new int(atoi(argv[UDT_SNDBUF_PARAM + offset])), sizeof(int));
    UDT::setsockopt(socket, 0, UDT_RCVBUF, new int(atoi(argv[UDT_RCVBUF_PARAM + offset])), sizeof(int));
-   UDT::setsockopt(socket, 0, UDP_SNDBUF, new int(atoi(argv[UDT_SNDBUF_PARAM + offset])), sizeof(int));
-   UDT::setsockopt(socket, 0, UDP_RCVBUF, new int(atoi(argv[UDT_RCVBUF_PARAM + offset])), sizeof(int));
+   UDT::setsockopt(socket, 0, UDP_SNDBUF, new int(atoi(argv[UDP_SNDBUF_PARAM + offset])), sizeof(int));
+   UDT::setsockopt(socket, 0, UDP_RCVBUF, new int(atoi(argv[UDP_RCVBUF_PARAM + offset])), sizeof(int));
 }
 
 void printAppliedParams(UDTSOCKET socket)
