@@ -12,6 +12,7 @@
 #include <udt.h>
 #include "cc.h"
 #include "test_util.h"
+#include "commonapp.h"
 
 using namespace std;
 
@@ -23,11 +24,14 @@ DWORD WINAPI recvdata(LPVOID);
 
 int main(int argc, char* argv[])
 {
-   if ((1 != argc) && ((2 != argc) || (0 == atoi(argv[1]))))
+   if (argc != 7)
    {
-      cout << "usage: appserver [server_port]" << endl;
+      cout << "usage: appserver [server_port] UDT_MSS UDT_SNDBUF UDT_RCVBUF UDP_SNDBUF UDP_RCVBUF" << endl;
       return 0;
    }
+
+   const int OFFSET = 2;
+   printInputParams(argc, argv, OFFSET);
 
    // Automatically start up and clean up UDT module.
    UDTUpDown _udt_;
@@ -55,10 +59,11 @@ int main(int argc, char* argv[])
    UDTSOCKET serv = UDT::socket(res->ai_family, res->ai_socktype, res->ai_protocol);
 
    // UDT Options
-   //UDT::setsockopt(serv, 0, UDT_CC, new CCCFactory<CUDPBlast>, sizeof(CCCFactory<CUDPBlast>));
-   //UDT::setsockopt(serv, 0, UDT_MSS, new int(9000), sizeof(int));
-   //UDT::setsockopt(serv, 0, UDT_RCVBUF, new int(10000000), sizeof(int));
-   //UDT::setsockopt(serv, 0, UDP_RCVBUF, new int(10000000), sizeof(int));
+   UDT::setsockopt(serv, 0, UDT_CC, new CCCFactory<CUDPBlast>, sizeof(CCCFactory<CUDPBlast>));
+   
+   setInputParams(serv, argc, argv, OFFSET);
+
+   printAppliedParams(serv);
 
    if (UDT::ERROR == UDT::bind(serv, res->ai_addr, res->ai_addrlen))
    {

@@ -9,6 +9,8 @@
 #include <iostream>
 #include <cstring>
 #include <udt.h>
+#include "cc.h"
+#include "commonapp.h"
 
 using namespace std;
 
@@ -21,20 +23,14 @@ DWORD WINAPI sendfile(LPVOID);
 int main(int argc, char* argv[])
 {
    //usage: sendfile [server_port]
-   if ((6 < argc) || ((2 == argc) && (0 == atoi(argv[1]))))
+   if (argc != 7)
    {
-      cout << "usage: sendfile [server_port] UDT_MSS UDT_SNDBUF UDT_RCVBUF UDT_MAXBW" << endl;
+      cout << "usage: sendfile [server_port] UDT_MSS UDT_SNDBUF UDT_RCVBUF UDP_SNDBUF UDP_RCVBUF" << endl;
       return 0;
    }
 
-   const int UDT_MSS_PARAM = 2;
-   cout << "UDT_MSS = " << argv[UDT_MSS_PARAM] << endl;
-   const int UDT_SNDBUF_PARAM = 3;
-   cout << "UDT_SNDBUF = " << argv[UDT_SNDBUF_PARAM] << endl;
-   const int UDT_RCVBUF_PARAM = 4;
-   cout << "UDT_RCVBUF = " << argv[UDT_RCVBUF_PARAM] << endl;
-   const int UDT_MAXBW_PARAM = 5;
-   cout << "UDT_MAXBW = " << argv[UDT_MAXBW_PARAM] << endl;
+   const int OFFSET = 2;
+   printInputParams(argc, argv, OFFSET);
 
    // use this function to initialize the UDT library
    UDT::startup();
@@ -59,10 +55,9 @@ int main(int argc, char* argv[])
 
    UDTSOCKET serv = UDT::socket(res->ai_family, res->ai_socktype, res->ai_protocol);
 
-   UDT::setsockopt(serv, 0, UDT_MSS, new int(atoi(argv[UDT_MSS_PARAM])), sizeof(int));
-   UDT::setsockopt(serv, 0, UDT_SNDBUF, new int(atoi(argv[UDT_SNDBUF_PARAM])), sizeof(int));
-   UDT::setsockopt(serv, 0, UDT_RCVBUF, new int(atoi(argv[UDT_RCVBUF_PARAM])), sizeof(int));
-   UDT::setsockopt(serv, 0, UDT_MAXBW, new int(atoi(argv[UDT_MAXBW_PARAM])), sizeof(int));
+   setInputParams(serv, argc, argv, OFFSET);
+
+   printAppliedParams(serv);
 
    // Windows UDP issue
    // For better performance, modify HKLM\System\CurrentControlSet\Services\Afd\Parameters\FastSendDatagramThreshold
