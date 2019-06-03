@@ -38,6 +38,7 @@ int main(int argc, char* argv[])
 
    UDTSOCKET fhandle = UDT::socket(hints.ai_family, hints.ai_socktype, hints.ai_protocol);
 
+   UDT::setsockopt(fhandle, 0, UDT_CC, new CCCFactory<CUDPBlast>, sizeof(CCCFactory<CUDPBlast>));
    setInputParams(fhandle, argc, argv, OFFSET);
 
    printAppliedParams(fhandle);
@@ -56,6 +57,13 @@ int main(int argc, char* argv[])
    }
 
    freeaddrinfo(peer);
+
+   // using CC method
+   CUDPBlast* cchandle = NULL;
+   int temp;
+   UDT::getsockopt(fhandle, 0, UDT_CC, &cchandle, &temp);
+   if (NULL != cchandle)
+	   cchandle->setRate(500);
 
    // send name information of the requested file
    int len = strlen(argv[3]);

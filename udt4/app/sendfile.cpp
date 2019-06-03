@@ -55,6 +55,7 @@ int main(int argc, char* argv[])
 
    UDTSOCKET serv = UDT::socket(res->ai_family, res->ai_socktype, res->ai_protocol);
 
+   UDT::setsockopt(serv, 0, UDT_CC, new CCCFactory<CUDPBlast>, sizeof(CCCFactory<CUDPBlast>));
    setInputParams(serv, argc, argv, OFFSET);
 
    printAppliedParams(serv);
