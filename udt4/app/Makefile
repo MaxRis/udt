@@ -26,7 +26,7 @@ ifeq ($(arch), SPARC)
    CCFLAGS += -DSPARC
 endif
 
-LDFLAGS = -L../src -ludt -lstdc++ -lpthread -lm
+LDFLAGS = ../src/libudt.a -lstdc++ -lpthread -lm
 
 ifeq ($(os), UNIX)
    LDFLAGS += -lsocket
@@ -45,15 +45,15 @@ all: $(APP)
 %.o: %.cpp
 	$(C++) $(CCFLAGS) $< -c
 
-appserver: appserver.o
+appserver: appserver.o commonapp.o
 	$(C++) $^ -o $@ $(LDFLAGS)
-appclient: appclient.o
+appclient: appclient.o commonapp.o
 	$(C++) $^ -o $@ $(LDFLAGS)
-sendfile: sendfile.o
+sendfile: sendfile.o commonapp.o
 	$(C++) $^ -o $@ $(LDFLAGS)
-recvfile: recvfile.o
+recvfile: recvfile.o commonapp.o
 	$(C++) $^ -o $@ $(LDFLAGS)
-test: test.o
+test: test.o commonapp.o
 	$(C++) $^ -o $@ $(LDFLAGS)
 
 clean:

@@ -9,6 +9,8 @@
 #include <iostream>
 #include <cstring>
 #include <udt.h>
+#include "cc.h"
+#include "commonapp.h"
 
 using namespace std;
 
@@ -21,11 +23,14 @@ DWORD WINAPI sendfile(LPVOID);
 int main(int argc, char* argv[])
 {
    //usage: sendfile [server_port]
-   if ((2 < argc) || ((2 == argc) && (0 == atoi(argv[1]))))
+   if (argc != 7)
    {
-      cout << "usage: sendfile [server_port]" << endl;
+      cout << "usage: sendfile [server_port] UDT_MSS UDT_SNDBUF UDT_RCVBUF UDP_SNDBUF UDP_RCVBUF" << endl;
       return 0;
    }
+
+   const int OFFSET = 2;
+   printInputParams(argc, argv, OFFSET);
 
    // use this function to initialize the UDT library
    UDT::startup();
@@ -50,12 +55,16 @@ int main(int argc, char* argv[])
 
    UDTSOCKET serv = UDT::socket(res->ai_family, res->ai_socktype, res->ai_protocol);
 
+   setInputParams(serv, argc, argv, OFFSET);
+
+   printAppliedParams(serv);
+
    // Windows UDP issue
    // For better performance, modify HKLM\System\CurrentControlSet\Services\Afd\Parameters\FastSendDatagramThreshold
-#ifdef WIN32
-   int mss = 1052;
-   UDT::setsockopt(serv, 0, UDT_MSS, &mss, sizeof(int));
-#endif
+//#ifdef WIN32
+//   int mss = 1052;
+//   UDT::setsockopt(serv, 0, UDT_MSS, &mss, sizeof(int));
+//#endif
 
    if (UDT::ERROR == UDT::bind(serv, res->ai_addr, res->ai_addrlen))
    {

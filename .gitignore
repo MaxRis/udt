@@ -1,0 +1,5 @@
+*.obj
+*.sbr
+*.pdb
+udt4/win/x64/
+udt4/win/.vs/

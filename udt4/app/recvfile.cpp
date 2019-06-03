@@ -10,16 +10,21 @@
 #include <cstdlib>
 #include <cstring>
 #include <udt.h>
+#include "cc.h"
+#include "commonapp.h"
 
 using namespace std;
 
 int main(int argc, char* argv[])
 {
-   if ((argc != 5) || (0 == atoi(argv[2])))
+   if ((argc != 10) || (0 == atoi(argv[2])))
    {
-      cout << "usage: recvfile server_ip server_port remote_filename local_filename" << endl;
+      cout << "usage: recvfile server_ip server_port remote_filename local_filename UDT_MSS UDT_SNDBUF UDT_RCVBUF UDP_SNDBUF UDP_RCVBUF" << endl;
       return -1;
    }
+
+   const int OFFSET = 5;
+   printInputParams(argc, argv, OFFSET);
 
    // use this function to initialize the UDT library
    UDT::startup();
@@ -32,6 +37,10 @@ int main(int argc, char* argv[])
    hints.ai_socktype = SOCK_STREAM;
 
    UDTSOCKET fhandle = UDT::socket(hints.ai_family, hints.ai_socktype, hints.ai_protocol);
+
+   setInputParams(fhandle, argc, argv, OFFSET);
+
+   printAppliedParams(fhandle);
 
    if (0 != getaddrinfo(argv[1], argv[2], &hints, &peer))
    {
@@ -47,7 +56,6 @@ int main(int argc, char* argv[])
    }
 
    freeaddrinfo(peer);
-
 
    // send name information of the requested file
    int len = strlen(argv[3]);
